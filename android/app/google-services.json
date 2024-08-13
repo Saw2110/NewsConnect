@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "318628658903",
+    "project_id": "news-connect-9bf8c",
+    "storage_bucket": "news-connect-9bf8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318628658903:android:525c35127da968e857fa92",
+        "android_client_info": {
+          "package_name": "sabin.com.newsconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGodNqcKPnDu-KlAhOxRfm0uSL9hwqHfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
