@@ -5,4 +5,5 @@ class AppRoutes {
 
   ///
   static const String indexScreen = "/IndexScreen";
+  static const String newsDetailsScreen = "/NewsDetailsScreen";
 }

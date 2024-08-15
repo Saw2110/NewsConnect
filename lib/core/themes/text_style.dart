@@ -50,4 +50,8 @@ class AppTextStyle {
     fontWeight: FontWeight.bold,
     color: AppColors.white,
   );
+  static TextStyle normalText = const TextStyle(
+    fontSize: 13.0,
+    color: AppColors.black,
+  );
 }

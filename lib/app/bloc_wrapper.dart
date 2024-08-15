@@ -4,6 +4,7 @@ import 'package:news_connect/dependency_injection/locator.dart';
 import 'package:news_connect/src/splash/bloc/splash_bloc.dart';
 
 import '../src/auth/auth.dart';
+import '../src/news/presentation/bloc/news_bloc.dart';
 
 class MultiBlocProviderWrapper extends StatelessWidget {
   final Widget child;
@@ -16,6 +17,7 @@ class MultiBlocProviderWrapper extends StatelessWidget {
         BlocProvider(create: (_) => SplashBloc()),
         BlocProvider(create: (_) => LoginBloc(sl())),
         BlocProvider(create: (_) => RegisterBloc(sl())),
+        BlocProvider(create: (_) => NewsBloc(sl())),
       ],
       child: child,
     );

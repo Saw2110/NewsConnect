@@ -42,11 +42,20 @@ class _FullScreenLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: AppLoadingOverlay.taskCompleted,
-      child: const Center(
-        child: CircularProgressIndicator.adaptive(
-          strokeWidth: 2,
-          backgroundColor: AppColors.black,
-        ),
+      child: const CustomLoading(),
+    );
+  }
+}
+
+class CustomLoading extends StatelessWidget {
+  const CustomLoading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator.adaptive(
+        strokeWidth: 2,
+        backgroundColor: AppColors.black,
       ),
     );
   }

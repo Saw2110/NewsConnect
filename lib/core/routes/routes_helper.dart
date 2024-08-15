@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_connect/core/routes/routes_name.dart';
+import 'package:news_connect/src/news/domain/entities/news_model.dart';
+import 'package:news_connect/src/news/presentation/ui/news_details_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../src/auth/presentation/ui/login/login_screen.dart';
@@ -26,6 +28,10 @@ class RouteGenerator {
         break;
       case AppRoutes.indexScreen:
         page = const IndexScreen();
+        break;
+      case AppRoutes.newsDetailsScreen:
+        var value = settings.arguments as Article;
+        page = NewsDetailsScreen(article: value);
         break;
       default:
         return _errorRoute();
