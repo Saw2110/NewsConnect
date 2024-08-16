@@ -65,6 +65,17 @@ class RegisterViewScreen extends StatelessWidget {
                 ),
                 30.yGap,
                 AppTextFormField(
+                  prefixIcon: const Icon(Icons.person),
+                  title: "Full Name",
+                  hintText: "Enter full name",
+                  controller: registerBloc.fullnameController,
+                  onChanged: (value) {
+                    registerBloc.formKey.currentState!.validate();
+                  },
+                  validator: (value) => value!.emptyValidation(),
+                ),
+                20.yGap,
+                AppTextFormField(
                   prefixIcon: const Icon(Icons.email_outlined),
                   title: "Email",
                   hintText: "example@gmail.com",

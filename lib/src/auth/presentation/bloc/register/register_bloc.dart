@@ -12,6 +12,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase registerUseCase;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _fullnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _cPasswordController = TextEditingController();
@@ -22,9 +23,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
   // Public getters for accessing the private members
   GlobalKey<FormState> get formKey => _formKey;
+  TextEditingController get fullnameController => _fullnameController;
   TextEditingController get emailController => _emailController;
   TextEditingController get passwordController => _passwordController;
   TextEditingController get cPasswordController => _cPasswordController;
+
   // Handle login button press event
   Future<void> _onRegisterButtonPressed(
     OnRegisterButtonPressed event,
@@ -59,10 +62,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   // Perform the login operation
   Future<AuthUser?> _registerUser() async {
-    debugPrint("BLOC: _loginUser()");
     return await registerUseCase(
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
+      fullName: _fullnameController.text.trim(),
     );
   }
 

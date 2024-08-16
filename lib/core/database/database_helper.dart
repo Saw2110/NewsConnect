@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'create_table.dart';
 import 'database_const.dart';
 
 class DatabaseProvider {
@@ -23,22 +24,26 @@ class DatabaseProvider {
 
   initiateDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    path = join(directory.path, DatabaseDetails.databaseName);
+    path = join(directory.path, DatabaseConst.databaseName);
     return await openDatabase(
       path,
-      version: DatabaseDetails.dbVersion,
+      version: DatabaseConst.dbVersion,
       onCreate: onCreate,
     );
   }
 
   Future<void> onDropDatabase() async {
-    // Database? db = await instance.database;
-    // await db!.delete(DatabaseDetails.catTable);
-    // await db.delete(DatabaseDetails.productTable);
+    Database? db = await instance.database;
+    await db!.delete(DatabaseConst.articletable);
+    await db.delete(DatabaseConst.favtable);
+
+    ///
+    await initiateDatabase();
   }
 
   Future<void> onCreate(Database db, int version) async {
     ///
-    // await CreateTable(db).categoryTable();
+    await CreateTable(db).articlesTable();
+    await CreateTable(db).favTable();
   }
 }

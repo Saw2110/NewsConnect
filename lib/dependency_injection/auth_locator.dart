@@ -1,12 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
 import '../src/auth/auth.dart';
 import 'locator.dart';
 
 void authLocator() {
   // Data sources
   sl.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(FirebaseAuth.instance),
+    () => AuthRemoteDataSourceImpl(sl(), sl()),
   );
 
   // Repositories

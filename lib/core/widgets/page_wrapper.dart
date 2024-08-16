@@ -8,6 +8,7 @@ class PageWrapper extends StatelessWidget {
   final Widget? floatingActionButton;
   final bool removeAllPadding;
   final bool canPop;
+  final bool automaticallyImplyLeading;
   final void Function(bool, dynamic)? onPopInvokedWithResult;
   final EdgeInsets extraPadding;
   const PageWrapper({
@@ -18,6 +19,7 @@ class PageWrapper extends StatelessWidget {
     this.floatingActionButton,
     this.removeAllPadding = false,
     this.canPop = true,
+    this.automaticallyImplyLeading = true,
     this.onPopInvokedWithResult,
     this.extraPadding = const EdgeInsets.all(0),
   });
@@ -28,7 +30,12 @@ class PageWrapper extends StatelessWidget {
       canPop: canPop,
       onPopInvokedWithResult: onPopInvokedWithResult,
       child: Scaffold(
-        appBar: appBarText.isNotEmpty ? AppBar(title: Text(appBarText)) : null,
+        appBar: appBarText.isNotEmpty
+            ? AppBar(
+                title: Text(appBarText),
+                automaticallyImplyLeading: automaticallyImplyLeading,
+              )
+            : null,
         backgroundColor: AppColors.scaffoldBackgroundColor,
         body: removeAllPadding
             ? body

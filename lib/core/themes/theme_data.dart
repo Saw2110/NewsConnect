@@ -35,6 +35,21 @@ class AppTheme {
     ),
 
     ///
+
+    dropdownMenuTheme: DropdownMenuThemeData(
+      inputDecorationTheme: InputDecorationTheme(
+        border: const OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+        fillColor: AppColors.textFillColor,
+        filled: true,
+        hintStyle: AppTextStyle.hintStyle,
+        contentPadding: const EdgeInsets.all(14),
+      ),
+    ),
+
+    ///
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         foregroundColor: AppColors.white,

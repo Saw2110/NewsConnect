@@ -8,7 +8,8 @@ class RegisterUseCase {
   Future<AuthUser?> call({
     required String email,
     required String password,
+    required String fullName,
   }) async {
-    return await repository.register(email, password);
+    return await repository.register(email, password, fullName);
   }
 }

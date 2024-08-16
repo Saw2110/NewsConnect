@@ -20,9 +20,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthUser?> register(String email, String password) async {
+  Future<AuthUser?> register(
+    String email,
+    String password,
+    String fullName,
+  ) async {
     final (authException, firebaseAuthUser) =
-        await remoteDataSource.register(email, password);
+        await remoteDataSource.register(email, password, fullName);
 
     if (authException != null) {
       _handleAuthException(authException);

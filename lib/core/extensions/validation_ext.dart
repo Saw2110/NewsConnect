@@ -37,4 +37,12 @@ extension StringX on String {
     }
     return null;
   }
+
+  // Empty Validation
+  String? emptyValidation() {
+    if (isEmpty) {
+      return 'Required';
+    }
+    return null;
+  }
 }
