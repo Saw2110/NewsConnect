@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_connect/core/core.dart';
 
+import '../favourites/favourites.dart';
 import '../news/news.dart';
 import '../profile/profile.dart';
 
@@ -25,7 +26,7 @@ class _IndexViewPageState extends State<IndexViewPage> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const NewsScreen(),
-    Text('Favorites', style: AppTextStyle.h1Bold),
+    const FavoriteScreen(),
     const ProfileScreen(),
   ];
 
@@ -34,6 +35,14 @@ class _IndexViewPageState extends State<IndexViewPage> {
       _selectedIndex = index;
     });
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     context.read<NewsBloc>().add(GetAllNews());
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

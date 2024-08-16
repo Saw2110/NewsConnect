@@ -9,4 +9,3 @@ sealed class NewsEvent extends Equatable {
 
 class GetAllNews extends NewsEvent {}
 
-class SaveNewsToFavourite extends NewsEvent {}

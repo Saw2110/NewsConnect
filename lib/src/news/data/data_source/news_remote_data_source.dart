@@ -22,6 +22,7 @@ class ArticleRemoteDataSourceImpl implements ArticleRemoteDataSource {
     try {
       var response = await apiProvider.getAPI(endPoint: endPoint);
       final List<dynamic> articlesJson = response['articles'];
+
       return articlesJson.map((json) => ArticleModel.fromJson(json)).toList();
     } catch (e) {
       debugPrint("$e");

@@ -1,4 +1,6 @@
-class Article {
+import 'package:equatable/equatable.dart';
+
+class Article extends Equatable {
   final String sourceId;
   final String sourceName;
   final String author;
@@ -9,7 +11,7 @@ class Article {
   final String publishedAt;
   final String content;
 
-  Article({
+  const Article({
     required this.sourceId,
     required this.sourceName,
     required this.author,
@@ -20,4 +22,17 @@ class Article {
     required this.publishedAt,
     required this.content,
   });
+
+  @override
+  List<Object?> get props => [
+        sourceId,
+        sourceName,
+        author,
+        title,
+        description,
+        url,
+        urlToImage,
+        publishedAt,
+        content
+      ];
 }

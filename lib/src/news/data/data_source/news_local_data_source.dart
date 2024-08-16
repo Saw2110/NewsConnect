@@ -1,10 +1,11 @@
 import 'package:sqflite/sqflite.dart';
 
+import '../../../../core/core.dart';
 import '../../news.dart';
 
 abstract class ArticleLocalDataSource {
   Future<List<ArticleModel>> getArticles();
-  Future<List<ArticleModel>> saveArticles();
+  Future<int> saveArticles(List<ArticleModel> articleList);
 }
 
 class ArticleLocalDataSourceImpl implements ArticleLocalDataSource {
@@ -14,27 +15,27 @@ class ArticleLocalDataSourceImpl implements ArticleLocalDataSource {
 
   @override
   Future<List<ArticleModel>> getArticles() async {
-    return [];
+    String myQuery = ''' SELECT * FROM ${DatabaseConst.articletable} ''';
+
+    final List<Map<String, dynamic>> mapData = await database.rawQuery(myQuery);
+
+    final result =
+        mapData.map((json) => ArticleModel.fromDatabase(json)).toList();
+
+    return result;
   }
 
   @override
-  Future<List<ArticleModel>> saveArticles() async {
+  Future<int> saveArticles(List<ArticleModel> articleList) async {
     int totalInserted = 0;
-    // database.rawQuery('DELETE FROM ${DatabaseDetails.catTable}');
-    // database.rawQuery('DELETE FROM ${DatabaseDetails.productTable}');
-
-    // for (var element in meal) {
-    //   String sql = '''
-    //       INSERT INTO ${DatabaseDetails.catTable} (${DatabaseDetails.catId}, ${DatabaseDetails.catName},${DatabaseDetails.catStatus})
-    //       VALUES (?,?,?);
-    //   ''';
-    //   int rowsAffected = await database
-    //       .rawInsert(sql, [element.id, element.name, element.status]);
-
-    //   totalInserted += rowsAffected;
-    //   await _addProduct(element.products);
-    // }
-    // return totalInserted;
-    return [];
+    database.rawQuery('DELETE FROM ${DatabaseConst.articletable}');
+    for (var element in articleList) {
+      int rowsAffected = await database.insert(
+        DatabaseConst.articletable,
+        element.toJson(),
+      );
+      totalInserted += rowsAffected;
+    }
+    return totalInserted;
   }
 }

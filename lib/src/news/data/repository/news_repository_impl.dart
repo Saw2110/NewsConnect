@@ -23,7 +23,7 @@ class ArticleRepositoryImpl implements ArticleRepository {
     if (await networkInfo.isConnected) {
       try {
         final articles = await remoteDataSource.getArticles();
-        // localDataSource.addData(responseData);
+        localDataSource.saveArticles(articles);
 
         return Right(articles);
       } catch (e) {

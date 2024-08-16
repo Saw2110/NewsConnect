@@ -11,14 +11,27 @@ class NewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NewsBloc(sl())..add(GetAllNews()),
+      create: (context) => NewsBloc(sl()),
       child: const NewsViewScreen(),
     );
   }
 }
 
-class NewsViewScreen extends StatelessWidget {
+class NewsViewScreen extends StatefulWidget {
   const NewsViewScreen({super.key});
+
+  @override
+  State<NewsViewScreen> createState() => _NewsViewScreenState();
+}
+
+class _NewsViewScreenState extends State<NewsViewScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<NewsBloc>().add(GetAllNews());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +44,7 @@ class NewsViewScreen extends StatelessWidget {
         listener: (context, state) => _handleStateChanges(context, state),
         builder: (context, state) {
           if (state is NewsSuccess) {
-            return _buildNewsList(state.newsModel);
+            return _buildNewsList(context, state.newsModel);
           }
           return const Center(child: Text("No data found."));
         },
@@ -50,33 +63,38 @@ class NewsViewScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildNewsList(List<Article> newsModel) {
+  Widget _buildNewsList(BuildContext context, List<Article> newsModel) {
     final horizontalArticles = newsModel.take(5).toList();
     final verticalArticles = newsModel.skip(5).toList();
 
     ///
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            "Discover",
-            style: AppTextStyle.h1Bold.copyWith(fontSize: 26.0),
-          ),
-          Text("News from all around the world", style: AppTextStyle.h2),
-          10.yGap,
-          AppTextFormField(
-            controller: TextEditingController(),
-            prefixIcon: const Icon(Icons.search),
-            suffixIcon: const Icon(Icons.tune),
-          ),
-          26.yGap,
-          _buildHorizontalNewsList(horizontalArticles),
-          10.yGap,
-          _buildVerticalNewsList(verticalArticles),
-        ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<NewsBloc>().add(GetAllNews());
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Discover",
+              style: AppTextStyle.h1Bold.copyWith(fontSize: 26.0),
+            ),
+            Text("News from all around the world", style: AppTextStyle.h2),
+            10.yGap,
+            AppTextFormField(
+              controller: TextEditingController(),
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: const Icon(Icons.tune),
+            ),
+            26.yGap,
+            _buildHorizontalNewsList(horizontalArticles),
+            10.yGap,
+            _buildVerticalNewsList(verticalArticles),
+          ],
+        ),
       ),
     );
   }

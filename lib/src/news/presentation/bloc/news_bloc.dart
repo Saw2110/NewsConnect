@@ -11,27 +11,23 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc(this.getArticlesUseCase) : super(NewsInitial()) {
     on<NewsEvent>((event, emit) {});
     on<GetAllNews>(_getAllNews);
-    on<SaveNewsToFavourite>(_saveToFavourite);
   }
 
   Future<void> _getAllNews(
     GetAllNews event,
     Emitter<NewsState> emit,
   ) async {
-    emit(NewsLoading());
+    try {
+      emit(NewsLoading());
 
-    final result = await getArticlesUseCase();
+      final result = await getArticlesUseCase();
 
-    result.fold(
-      (failure) => emit(const NewsError(message: 'Failed to fetch articles')),
-      (articles) => emit(NewsSuccess(newsModel: articles)),
-    );
-  }
-
-  Future<void> _saveToFavourite(
-    SaveNewsToFavourite event,
-    Emitter<NewsState> emit,
-  ) async {
-    // Implementation for saving news to favorites
+      result.fold(
+        (failure) => emit(const NewsError(message: 'Failed to fetch articles')),
+        (articles) => emit(NewsSuccess(newsModel: articles)),
+      );
+    } catch (e) {
+      emit(NewsError(message: '$e'));
+    }
   }
 }
