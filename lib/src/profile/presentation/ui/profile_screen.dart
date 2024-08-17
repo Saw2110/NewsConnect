@@ -30,17 +30,22 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageWrapper(
       removeAllPadding: true,
-      body: BlocBuilder<UserCubit, UserState>(
+      body: BlocConsumer<UserCubit, UserState>(
         builder: (context, state) {
-          if (state is UserLoading) {
-            return const CustomLoading();
-          } else if (state is UserSuccess) {
+          if (state is UserSuccess) {
             final user = state.user;
             return _buildProfileUI(user);
           } else if (state is UserError) {
             return Center(child: Text('Error: ${state.message}'));
           } else {
             return const Center(child: Text('No user data'));
+          }
+        },
+        listener: (BuildContext context, UserState state) {
+          if (state is UserLoading) {
+            AppLoadingOverlay.of(context).show();
+          } else {
+            AppLoadingOverlay.of(context).hide();
           }
         },
       ),
