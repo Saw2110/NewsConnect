@@ -11,14 +11,15 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => UserCubit(
-        updateUserUseCase: sl(),
-        getUserUseCase: sl(),
-        firebaseAuth: sl(),
-      )..getUser(),
-      child: const ProfileView(),
-    );
+    return const ProfileView();
+    // return BlocProvider(
+    //   create: (context) => UserCubit(
+    //     updateUserUseCase: sl(),
+    //     getUserUseCase: sl(),
+    //     firebaseAuth: sl(),
+    //   )..getUser(),
+    //   child: const ProfileView(),
+    // );
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_connect/core/core.dart';
 
 import '../favourites/favourites.dart';
@@ -36,13 +37,14 @@ class _IndexViewPageState extends State<IndexViewPage> {
     });
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     context.read<NewsBloc>().add(GetAllNews());
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<NewsBloc>().add(GetAllNews());
+      context.read<UserCubit>().getUser();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

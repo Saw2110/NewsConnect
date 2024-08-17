@@ -5,6 +5,7 @@ import '../../news.dart';
 
 abstract class ArticleRemoteDataSource {
   Future<List<ArticleModel>> getArticles();
+  Future<List<ArticleModel>> searchArticles(String text);
 }
 
 class ArticleRemoteDataSourceImpl implements ArticleRemoteDataSource {
@@ -18,6 +19,24 @@ class ArticleRemoteDataSourceImpl implements ArticleRemoteDataSource {
     final from = "$yesterdayDateTime".substring(0, 10);
     String endPoint =
         "/everything?q=tesla&from=$from&sortBy=publishedAt&apiKey=${ApiConst.apiKey}";
+
+    try {
+      var response = await apiProvider.getAPI(endPoint: endPoint);
+      final List<dynamic> articlesJson = response['articles'];
+
+      return articlesJson.map((json) => ArticleModel.fromJson(json)).toList();
+    } catch (e) {
+      debugPrint("$e");
+      throw Exception('Failed to load articles');
+    }
+  }
+
+  @override
+  Future<List<ArticleModel>> searchArticles(String text) async {
+    final yesterdayDateTime = DateTime.now().subtract(const Duration(days: 1));
+    final from = "$yesterdayDateTime".substring(0, 10);
+    String endPoint =
+        "/everything?q=$text&from=$from&sortBy=publishedAt&apiKey=${ApiConst.apiKey}";
 
     try {
       var response = await apiProvider.getAPI(endPoint: endPoint);

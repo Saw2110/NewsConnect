@@ -5,6 +5,7 @@ import '../../news.dart';
 
 abstract class ArticleRepository {
   Future<Either<Failure, List<ArticleModel>>> getArticles();
+  Future<Either<Failure, List<ArticleModel>>> searchArticle(String text);
 }
 
 class ArticleRepositoryImpl implements ArticleRepository {
@@ -26,8 +27,10 @@ class ArticleRepositoryImpl implements ArticleRepository {
         localDataSource.saveArticles(articles);
 
         return Right(articles);
-      } catch (e) {
+      } on ServerException {
         return Left(ServerFailure());
+      } catch (e) {
+        return Left(CacheFailure());
       }
     } else {
       try {
@@ -36,6 +39,23 @@ class ArticleRepositoryImpl implements ArticleRepository {
       } catch (e) {
         return Left(ServerFailure());
       }
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ArticleModel>>> searchArticle(String text) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final articles = await remoteDataSource.getArticles();
+
+        return Right(articles);
+      } on ServerException {
+        return Left(ServerFailure());
+      } catch (e) {
+        return Left(CacheFailure());
+      }
+    } else {
+      return Left(ServerFailure());
     }
   }
 }

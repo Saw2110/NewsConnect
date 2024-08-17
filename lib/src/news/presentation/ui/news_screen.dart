@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_connect/core/core.dart';
-import 'package:news_connect/dependency_injection/dependency_injection.dart';
 
 import '../../news.dart';
 
@@ -10,10 +9,7 @@ class NewsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NewsBloc(sl()),
-      child: const NewsViewScreen(),
-    );
+    return const NewsViewScreen();
   }
 }
 
@@ -26,57 +22,15 @@ class NewsViewScreen extends StatefulWidget {
 
 class _NewsViewScreenState extends State<NewsViewScreen> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<NewsBloc>().add(GetAllNews());
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: BlocConsumer<NewsBloc, NewsState>(
-        listenWhen: (previous, current) =>
-            previous.runtimeType != current.runtimeType,
-        buildWhen: (previous, current) =>
-            previous.runtimeType != current.runtimeType,
-        listener: (context, state) => _handleStateChanges(context, state),
-        builder: (context, state) {
-          if (state is NewsSuccess) {
-            return _buildNewsList(context, state.newsModel);
-          }
-          return const Center(child: Text("No data found."));
+      child: RefreshIndicator(
+        onRefresh: () async {
+          context.read<NewsBloc>().add(GetAllNews());
         },
-      ),
-    );
-  }
-
-  void _handleStateChanges(BuildContext context, NewsState state) {
-    if (state is NewsLoading) {
-      AppLoadingOverlay.of(context).show();
-    } else if (state is NewsSuccess || state is NewsError) {
-      AppLoadingOverlay.of(context).hide();
-      if (state is NewsError) {
-        context.showSnackBar(message: state.message);
-      }
-    }
-  }
-
-  Widget _buildNewsList(BuildContext context, List<Article> newsModel) {
-    final horizontalArticles = newsModel.take(5).toList();
-    final verticalArticles = newsModel.skip(5).toList();
-
-    ///
-    return RefreshIndicator(
-      onRefresh: () async {
-        context.read<NewsBloc>().add(GetAllNews());
-      },
-      child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "Discover",
@@ -85,17 +39,46 @@ class _NewsViewScreenState extends State<NewsViewScreen> {
             Text("News from all around the world", style: AppTextStyle.h2),
             10.yGap,
             AppTextFormField(
-              controller: TextEditingController(),
+              controller: context.read<NewsBloc>().searchController,
               prefixIcon: const Icon(Icons.search),
               suffixIcon: const Icon(Icons.tune),
+              onChanged: (text) {
+                context.read<NewsBloc>().add(NewsSearchEvent(text: text));
+              },
             ),
-            26.yGap,
-            _buildHorizontalNewsList(horizontalArticles),
-            10.yGap,
-            _buildVerticalNewsList(verticalArticles),
+            20.yGap,
+            Expanded(child: _buildNewsList()),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildNewsList() {
+    return BlocBuilder<NewsBloc, NewsState>(
+      builder: (context, state) {
+        if (state.status == Status.loading) {
+          return const CustomLoading();
+        }
+        if (state.status == Status.error) {
+          context.showSnackBar(
+            message: state.errorMessage ?? 'Unknown error',
+          );
+        }
+        final horizontalArticles = state.newsModel.take(5).toList();
+        final verticalArticles = state.newsModel.skip(5).toList();
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHorizontalNewsList(horizontalArticles),
+              10.yGap,
+              _buildVerticalNewsList(verticalArticles),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -105,10 +88,9 @@ class _NewsViewScreenState extends State<NewsViewScreen> {
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemCount: (newsModel.length > 10 ? 5 : newsModel.length),
+        itemCount: newsModel.length,
         itemBuilder: (context, index) {
           final article = newsModel[index];
-          if (_isRemoved(article)) return const SizedBox.shrink();
           return NewsItem(
             article: article,
             isHorizontal: true,
@@ -131,7 +113,6 @@ class _NewsViewScreenState extends State<NewsViewScreen> {
       itemCount: newsModel.length,
       itemBuilder: (context, index) {
         final article = newsModel[index];
-        if (_isRemoved(article)) return const SizedBox.shrink();
         return NewsItem(
           article: article,
           onTap: () {
@@ -143,11 +124,5 @@ class _NewsViewScreenState extends State<NewsViewScreen> {
         );
       },
     );
-  }
-
-  bool _isRemoved(Article article) {
-    return article.title == "[Removed]" ||
-        article.description == "[Removed]" ||
-        article.content == "[Removed]";
   }
 }
