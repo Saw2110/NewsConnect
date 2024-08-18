@@ -46,7 +46,7 @@ class ArticleRepositoryImpl implements ArticleRepository {
   Future<Either<Failure, List<ArticleModel>>> searchArticle(String text) async {
     if (await networkInfo.isConnected) {
       try {
-        final articles = await remoteDataSource.getArticles();
+        final articles = await remoteDataSource.searchArticles(text);
 
         return Right(articles);
       } on ServerException {

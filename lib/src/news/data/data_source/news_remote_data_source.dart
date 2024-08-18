@@ -35,6 +35,7 @@ class ArticleRemoteDataSourceImpl implements ArticleRemoteDataSource {
   Future<List<ArticleModel>> searchArticles(String text) async {
     final yesterdayDateTime = DateTime.now().subtract(const Duration(days: 1));
     final from = "$yesterdayDateTime".substring(0, 10);
+    
     String endPoint =
         "/everything?q=$text&from=$from&sortBy=publishedAt&apiKey=${ApiConst.apiKey}";
 

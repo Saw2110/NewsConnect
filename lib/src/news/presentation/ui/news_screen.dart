@@ -43,7 +43,11 @@ class _NewsViewScreenState extends State<NewsViewScreen> {
               prefixIcon: const Icon(Icons.search),
               suffixIcon: const Icon(Icons.tune),
               onChanged: (text) {
-                context.read<NewsBloc>().add(NewsSearchEvent(text: text));
+                if (text!.isNotEmpty) {
+                  context.read<NewsBloc>().add(NewsSearchEvent(text: text));
+                } else {
+                  context.read<NewsBloc>().add(GetAllNews());
+                }
               },
             ),
             20.yGap,

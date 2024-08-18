@@ -19,6 +19,7 @@ class APIProvider {
       'Authorization': 'DeviceName',
     };
 
+    debugPrint("apiUrl -> $apiUrl");
     try {
       late http.Response response;
 

@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:news_connect/core/utils/transformer.dart';
 import 'package:news_connect/src/news/news.dart';
 
 part 'news_event.dart';
@@ -16,7 +17,10 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc(this.getArticlesUseCase) : super(NewsState.initial()) {
     on<NewsEvent>((event, emit) {});
     on<GetAllNews>(_getAllNews);
-    on<NewsSearchEvent>(_newsSearchEvent);
+    on<NewsSearchEvent>(
+      _newsSearchEvent,
+      transformer: debounce(),
+    );
   }
 
   Future<void> _newsSearchEvent(
@@ -27,9 +31,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       emit(
         state.copyWith(newsModel: [], status: Status.loading),
       );
-      if (event.text!.isEmpty) {
-        emit(NewsState.initial());
-      }
+
       final result = await getArticlesUseCase.withParam(event.text ?? "");
       result.fold(
         (failure) => emit(

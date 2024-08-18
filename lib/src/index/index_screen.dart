@@ -49,6 +49,7 @@ class _IndexViewPageState extends State<IndexViewPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
+      canPop: false,
       body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

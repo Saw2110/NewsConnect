@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_connect/core/core.dart';
+import 'package:news_connect/core/utils/connection_check.dart';
 import 'package:news_connect/src/profile/profile.dart';
 
 class UserProfileForm extends StatelessWidget {
@@ -88,10 +91,15 @@ class UserProfileForm extends StatelessWidget {
               ),
               20.yGap,
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
                     _formKey.currentState?.save();
-                    userCubit.updateUser(user);
+
+                    if (await ConnectionCheck.internet()) {
+                      await userCubit.updateUser(user);
+                    } else {
+                      await _noInternetConnection(context);
+                    }
                   }
                 },
                 child: const Text('Save Changes'),
@@ -101,5 +109,9 @@ class UserProfileForm extends StatelessWidget {
         );
       },
     );
+  }
+
+  _noInternetConnection(BuildContext context) {
+    context.showSnackBar(message: "No internet connection");
   }
 }
