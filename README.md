@@ -49,4 +49,4 @@ Feel free to ask if there is anything regarding the project.
 
 ## APK
 
-[Download APK](appfile/NewsConnect.apk)
+[Download APK](https://github.com/Saw2110/NewsConnect/raw/main/appfile/NewsConnect.apk)
