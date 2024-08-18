@@ -1,10 +1,10 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_connect/core/core.dart';
 import 'package:news_connect/core/utils/connection_check.dart';
 import 'package:news_connect/src/profile/profile.dart';
+
+import '../../../../../app/app.dart';
 
 class UserProfileForm extends StatelessWidget {
   final UserModel user;
@@ -98,7 +98,7 @@ class UserProfileForm extends StatelessWidget {
                     if (await ConnectionCheck.internet()) {
                       await userCubit.updateUser(user);
                     } else {
-                      await _noInternetConnection(context);
+                      await _noInternetConnection();
                     }
                   }
                 },
@@ -111,7 +111,8 @@ class UserProfileForm extends StatelessWidget {
     );
   }
 
-  _noInternetConnection(BuildContext context) {
+  _noInternetConnection() {
+    final context = AppConst.scaffoldMessengerKey.currentContext!;
     context.showSnackBar(message: "No internet connection");
   }
 }

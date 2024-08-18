@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_connect/src/auth/auth.dart';
 
+import '../../../../../app/app.dart';
 import '../../../../../core/core.dart';
+import '../../../../../core/utils/connection_check.dart';
 import '../../../../../dependency_injection/dependency_injection.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -88,8 +90,12 @@ class LoginViewScreen extends StatelessWidget {
                 30.yGap,
                 AppPrimaryButton(
                   buttonText: "LOGIN",
-                  onPressed: () {
-                    loginBloc.add(const OnLoginButtonPressed());
+                  onPressed: () async {
+                    if (await ConnectionCheck.internet()) {
+                      loginBloc.add(const OnLoginButtonPressed());
+                    } else {
+                      await _noInternetConnection();
+                    }
                   },
                 ),
 
@@ -121,5 +127,10 @@ class LoginViewScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _noInternetConnection() {
+    final context = AppConst.scaffoldMessengerKey.currentContext!;
+    context.showSnackBar(message: "No internet connection");
   }
 }
