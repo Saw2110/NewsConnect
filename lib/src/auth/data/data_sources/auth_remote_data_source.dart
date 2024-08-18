@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:news_connect/src/auth/auth.dart';
 
+import '../../../../core/core.dart';
+
 abstract class AuthRemoteDataSource {
   Future<(FirebaseAuthException?, FirebaseAuthUser?)> login(
     String email,
@@ -78,13 +80,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String fullName,
   }) async {
-    final usersRef = firestore.collection('users');
+    final usersRef = firestore.collection(FirebaseConst.usersCollection);
     await usersRef.doc(uid).set({
       'id': uid,
       'email': email,
       'fullName': fullName,
       'contactNo': "",
-      'createdDate': DateTime.now().toUtc(), // Updated to use DateTime.now()
+      'createdDate':DateTime.now().toString(),
       'gender': "",
       'bio': "",
       'address': "",
