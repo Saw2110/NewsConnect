@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:news_connect/core/core.dart';
 import 'package:news_connect/src/auth/auth.dart';
@@ -15,12 +14,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase loginUseCase;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController(
-    text: kDebugMode ? "test@test.com" : "",
-  );
-  final TextEditingController _passwordController = TextEditingController(
-    text: kDebugMode ? "11Asabin@@" : "",
-  );
+  final TextEditingController _emailController =
+      TextEditingController(text: "");
+  final TextEditingController _passwordController =
+      TextEditingController(text: "");
 
   LoginBloc(this.loginUseCase) : super(LoginInitial()) {
     on<LoginEvent>((event, emit) {});

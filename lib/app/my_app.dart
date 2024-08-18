@@ -13,7 +13,7 @@ class MainApp extends StatelessWidget {
     return MultiBlocProviderWrapper(
       child: MaterialApp(
         navigatorKey: AppConst.navigationKey,
-        scaffoldMessengerKey: AppConst.scaffoldMessengerKey,
+        // scaffoldMessengerKey: AppConst.scaffoldMessengerKey,
         title: AppConst.appName,
         scrollBehavior: const ScrollBehavior().copyWith(
           physics: const ClampingScrollPhysics(),

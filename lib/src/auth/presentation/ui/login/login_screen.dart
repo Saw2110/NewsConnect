@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_connect/src/auth/auth.dart';
 
-import '../../../../../app/app.dart';
 import '../../../../../core/core.dart';
 import '../../../../../core/utils/connection_check.dart';
 import '../../../../../dependency_injection/dependency_injection.dart';
@@ -31,12 +30,12 @@ class LoginViewScreen extends StatelessWidget {
           AppLoadingOverlay.of(context).show();
         }
         if (state is LoginSuccess) {
-          context.showSnackBar(message: "Login Successfully");
+          "Login Successfully".successToast();
           AppLoadingOverlay.of(context).hide();
           NavigationService.pushNamed(AppRoutes.indexScreen);
         }
         if (state is LoginError) {
-          context.showSnackBar(message: state.message);
+          state.message.errorToast();
           AppLoadingOverlay.of(context).hide();
         }
       },
@@ -94,7 +93,7 @@ class LoginViewScreen extends StatelessWidget {
                     if (await ConnectionCheck.internet()) {
                       loginBloc.add(const OnLoginButtonPressed());
                     } else {
-                      await _noInternetConnection();
+                      "No internet connection".errorToast();
                     }
                   },
                 ),
@@ -127,10 +126,5 @@ class LoginViewScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _noInternetConnection() {
-    final context = AppConst.scaffoldMessengerKey.currentContext!;
-    context.showSnackBar(message: "No internet connection");
   }
 }

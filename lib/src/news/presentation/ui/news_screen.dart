@@ -65,9 +65,7 @@ class _NewsViewScreenState extends State<NewsViewScreen> {
           return const CustomLoading();
         }
         if (state.status == Status.error) {
-          context.showSnackBar(
-            message: state.errorMessage ?? 'Unknown error',
-          );
+          (state.errorMessage ?? "Unknown error").errorToast();
         }
         final horizontalArticles = state.newsModel.take(5).toList();
         final verticalArticles = state.newsModel.skip(5).toList();

@@ -4,8 +4,6 @@ import 'package:news_connect/core/core.dart';
 import 'package:news_connect/core/utils/connection_check.dart';
 import 'package:news_connect/src/profile/profile.dart';
 
-import '../../../../../app/app.dart';
-
 class UserProfileForm extends StatelessWidget {
   final UserModel user;
 
@@ -98,7 +96,7 @@ class UserProfileForm extends StatelessWidget {
                     if (await ConnectionCheck.internet()) {
                       await userCubit.updateUser(user);
                     } else {
-                      await _noInternetConnection();
+                      "No internet connection".errorToast();
                     }
                   }
                 },
@@ -109,10 +107,5 @@ class UserProfileForm extends StatelessWidget {
         );
       },
     );
-  }
-
-  _noInternetConnection() {
-    final context = AppConst.scaffoldMessengerKey.currentContext!;
-    context.showSnackBar(message: "No internet connection");
   }
 }

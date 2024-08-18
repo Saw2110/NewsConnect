@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_connect/src/auth/auth.dart';
 
-import '../../../../../app/app_const.dart';
 import '../../../../../core/core.dart';
 import '../../../../../core/utils/connection_check.dart';
 import '../../../../../dependency_injection/dependency_injection.dart';
@@ -31,12 +30,12 @@ class RegisterViewScreen extends StatelessWidget {
           AppLoadingOverlay.of(context).show();
         }
         if (state is RegisterSuccess) {
-          context.showSnackBar(message: "Register Successfully");
+          "Register Successfully".successToast();
           AppLoadingOverlay.of(context).hide();
           NavigationService.pop();
         }
         if (state is RegisterError) {
-          context.showSnackBar(message: state.message);
+          state.message.errorToast();
           AppLoadingOverlay.of(context).hide();
         }
       },
@@ -119,7 +118,7 @@ class RegisterViewScreen extends StatelessWidget {
                     if (await ConnectionCheck.internet()) {
                       registerBloc.add(const OnRegisterButtonPressed());
                     } else {
-                      await _noInternetConnection();
+                      "No internet connection".errorToast();
                     }
                   },
                 ),
@@ -152,10 +151,5 @@ class RegisterViewScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _noInternetConnection() {
-    final context = AppConst.scaffoldMessengerKey.currentContext!;
-    context.showSnackBar(message: "No internet connection");
   }
 }

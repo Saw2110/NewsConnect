@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-import '../utils/snackbar_helper.dart';
+import '../core.dart';
 
-extension SnackBar on BuildContext {
-  void showSnackBar({required String message}) {
-    ScaffoldMessenger.of(this).showSnackBar(
-      SnackbarHelper.show(message: message),
+extension StringToastExtension on String {
+  void showToast({required Color backgroundColor}) {
+    Fluttertoast.showToast(
+      msg: this,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: backgroundColor,
+      textColor: Colors.white,
+    );
+  }
+
+  void successToast() {
+    Fluttertoast.showToast(
+      msg: this,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: AppColors.green,
+      textColor: Colors.white,
+    );
+  }
+
+  void errorToast() {
+    Fluttertoast.showToast(
+      msg: this,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: AppColors.red,
+      textColor: Colors.white,
     );
   }
 }
