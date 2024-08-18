@@ -46,3 +46,7 @@ NewsConnect is a Flutter application demonstrating proficiency in user managemen
 
 Feel free to ask if there is anything regarding the project.  
 [Email](work.sabinghimire@gmail.com) : `work.sabinghimire@gmail.com`
+
+## APK
+
+[Download APK](appfile/NewsConnect.apk)
